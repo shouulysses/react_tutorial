@@ -14,12 +14,31 @@ R = React.DOM
     records.push record
     @setState records: records
     
+  credits: ->
+    credits = @state.records.filter (val) -> val.amount >= 0
+    credits.reduce ((prev, curr) ->
+      prev + parseFloat(curr.amount)), 0
+  
+  debits: ->
+    debits = @state.records.filter (val) -> val.amount < 0
+    debits.reduce ((prev, curr) ->
+      prev + parseFloat(curr.amount)
+    ), 0
+    
+  balance: ->
+    @debits() + @credits()
+  
   render: ->
     R.div
       className: 'records'
       R.h2
         className: 'title'
         'Records'
+      R.div
+        className: 'row'
+        React.createElement AmountBox, type: 'success', amount: @credits(), text: "Credit"
+        React.createElement AmountBox, type: 'danger', amount: @debits(), text: "Debit"
+        React.createElement AmountBox, type: 'info', amount: @balance(), text: "Balance"
       React.createElement RecordForm, handleNewRecord: @addRecord
       R.hr null
       R.table
