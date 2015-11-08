@@ -16,7 +16,15 @@ class RecordsController < ApplicationController
     Record.find(params[:id]).destroy
     head :no_content
   end
-
+  
+  def update
+    @record = Record.find(params[:id])
+    if @record.update(record_params)
+      render json: @record
+    else
+      render json: @record.erros, status: :unprocessable_entity
+    end
+  end
   
   private
 
