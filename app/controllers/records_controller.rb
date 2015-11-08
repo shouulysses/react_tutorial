@@ -5,7 +5,6 @@ class RecordsController < ApplicationController
   
   def create
     @record = Record.new(record_params)
-
     if @record.save
       render json: @record
     else
@@ -13,6 +12,12 @@ class RecordsController < ApplicationController
     end
   end
 
+  def destroy
+    Record.find(params[:id]).destroy
+    head :no_content
+  end
+
+  
   private
 
     def record_params
